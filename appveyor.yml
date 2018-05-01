@@ -39,31 +39,6 @@ init:
   - set PIP_EXE=C:\%PYTHON%\Scripts\pip
   - call %PYTHON_EXE% --version
   - call %PIP_EXE% --version
-  - echo [distutils] # this tells distutils what package indexes you can push to > %USERPROFILE%\.pypirc
-  - echo index-servers = >> %USERPROFILE%\.pypirc
-  - echo     pypi >> %USERPROFILE%\.pypirc
-  - echo     pypitest >> %USERPROFILE%\.pypirc
-  - echo     legacy >> %USERPROFILE%\.pypirc
-  - echo. >> %USERPROFILE%\.pypirc
-  - echo [pypi] >> %USERPROFILE%\.pypirc
-  - echo repository: https://pypi.python.org/pypi >> %USERPROFILE%\.pypirc
-  - echo username: %PYPI_USERNAME% >> %USERPROFILE%\.pypirc
-  - echo password: %PYPI_PASSWORD% >> %USERPROFILE%\.pypirc
-  - echo. >> %USERPROFILE%\.pypirc
-  - echo [pypitest] >> %USERPROFILE%\.pypirc
-  - echo repository: https://testpypi.python.org/pypi >> %USERPROFILE%\.pypirc
-  - echo username: %PYPI_USERNAME% >> %USERPROFILE%\.pypirc
-  - echo password: %PYPI_PASSWORD% >> %USERPROFILE%\.pypirc
-  - echo. >> %USERPROFILE%\.pypirc
-  - echo [legacy] >> %USERPROFILE%\.pypirc
-  - echo repository: https://upload.pypi.org/legacy/ >> %USERPROFILE%\.pypirc
-  - echo username: %PYPI_USERNAME% >> %USERPROFILE%\.pypirc
-  - echo password: %PYPI_PASSWORD% >> %USERPROFILE%\.pypirc
-  - echo. >> %USERPROFILE%\.pypirc
-  - echo [server-login] >> %USERPROFILE%\.pypirc
-  - echo username: %PYPI_USERNAME% >> %USERPROFILE%\.pypirc
-  - echo password: %PYPI_PASSWORD% >> %USERPROFILE%\.pypirc
-  - dir %USERPROFILE%
 
 # cache:
   # - C:\ProgramData\chocolatey\bin -> appveyor.yml
@@ -82,6 +57,7 @@ install:
   - dir %PYTHON_DIR%\Scripts\
   - call %NOSE_EXE% --version
   - call %TWINE_EXE% --version
+  - call .\pypirc.cmd
 
 # real work
 build:
