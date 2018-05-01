@@ -90,12 +90,12 @@ build:
 before_build:
   - echo "before build script"
   - git clone --recursive https://github.com/dmlc/gluon-cv gluon-cv %GIT_ADDITIONAL_FLAGS%
-  - pushd .\gluon-cv
+  - cd .\gluon-cv
   - FOR /F "delims=" %%i IN ('git rev-parse HEAD') DO echo %%i > COMMIT_HASH
 
 # scripts to run after build
 after_build:
-  - cd %APPVEYOR_BUILD_FOLDER%
+  - cd %APPVEYOR_BUILD_FOLDER%\gluon-cv
   - call %PYTHON_EXE% setup.py sdist
   - call %PYTHON_EXE% setup.py bdist_wheel --universal
 
@@ -104,25 +104,23 @@ build_script:
 
 # scripts to run before tests
 before_test:
-  - cd %APPVEYOR_BUILD_FOLDER%
-  - FOR /F "tokens=* USEBACKQ" %%F IN (`dir /b /a-d dist\mxnet*`) DO (SET wheel_name=%%F)
+  - cd %APPVEYOR_BUILD_FOLDER%\gluon-cv
+  - FOR /F "tokens=* USEBACKQ" %%F IN (`dir /b /a-d dist\gluoncv*`) DO (SET wheel_name=%%F)
 
 # to run your custom scripts instead of automatic tests
 test_script:
-  - cd %APPVEYOR_BUILD_FOLDER%
+  - cd %APPVEYOR_BUILD_FOLDER%\gluon-cv
   - echo %wheel_name%
   - 7z x "dist\%wheel_name%" -odebug_wheel
   - dir
-  - dir debug_wheel\mxnet
+  - dir debug_wheel\gluoncv
   - call %PIP_EXE% install -U --force-reinstall "dist\%wheel_name%"
+  - cd %APPVEYOR_BUILD_FOLDER%
   - call %PYTHON_EXE% sanity_test.py
-  # - call %NOSE_EXE% -v mxnet-build\tests\python\unittest\test_gluon_data.py
-  # - call %NOSE_EXE% -v mxnet-build\tests\python\unittest\test_gluon_model_zoo.py
 
 artifacts:
-  - path: dist\*
+  - path: gluon-cv\dist\*
     name: pypiartifacts
 
 deploy_script:
-  # - call %TWINE_EXE% upload -r legacy --skip-existing dist/*
-  - ps: If ($env:APPVEYOR_REPO_TAG -eq "true" -Or $env:APPVEYOR_SCHEDULED_BUILD -eq "True") { Invoke-Expression "$env:TWINE_EXE upload -r legacy --skip-existing dist/*" } Else { write-output "Not on a tag or scheduled, won't deploy to pypi"}
+  - ps: If ($env:APPVEYOR_REPO_TAG -eq "true" -Or $env:APPVEYOR_SCHEDULED_BUILD -eq "True") { Invoke-Expression "$env:TWINE_EXE upload -r pypi --skip-existing gluon-cv/dist/*" } Else { write-output "Not on a tag or scheduled, won't deploy to pypi"}
