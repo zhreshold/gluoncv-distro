@@ -52,7 +52,7 @@ install:
   - echo "install script"
   - choco install -y pandoc
   - pandoc --version
-  - call %PIP_EXE% install pypandoc nose wheel twine numpy matplotlib
+  - call %PIP_EXE% install pypandoc nose wheel twine numpy matplotlib mxnet
   - SET NOSE_EXE=%PYTHON_DIR%\Scripts\nosetests
   - SET TWINE_EXE=%PYTHON_DIR%\Scripts\twine
   - dir %PYTHON_DIR%\Scripts\
@@ -61,7 +61,7 @@ install:
   - call .\pypirc.cmd
 
 # real work
-build:
+# build:
 
 # scripts to run before build
 before_build:
