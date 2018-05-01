@@ -1,2 +1,2 @@
-# gluonvision-distro
-PyPI for gluonvision
+# gluoncv-distro
+PyPI for GluonCV

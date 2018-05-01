@@ -1,0 +1,128 @@
+# Notes:
+#   - Minimal appveyor.yml file is an empty file. All sections are optional.
+#   - Indent each level of configuration with 2 spaces. Do not use tabs!
+#   - All section names are case-sensitive.
+#   - Section names should be unique on each level.
+
+#---------------------------------#
+#      general configuration      #
+#---------------------------------#
+
+# version format
+version: 1.0.{build}
+
+# branches to build
+branches:
+  only:
+    - master
+
+# Build worker image (VM template)
+image: Visual Studio 2015
+
+# environment variables
+environment:
+  PYTHON: Python35
+  PYPI_PASSWORD:
+    secure: I2X8n7lRmasNOSfkam/LctMp5yw2X3UYmsA46RD6ikI=
+  PYPI_USERNAME:
+    secure: aOj5+o65rCsGgeSwL7nHjg==
+
+matrix:
+  fast_finish: true
+
+# scripts that are called at very beginning, before repo cloning
+init:
+  - git config --global core.autocrlf input
+  - ps: If ($env:APPVEYOR_REPO_TAG -eq "true" ) { write-output "From a tag build"; $GIT_TAG = (echo $env:APPVEYOR_REPO_TAG_NAME | %{$_ -replace "^patch-[^-]*-", ""});  $env:GIT_ADDITIONAL_FLAGS = "-b $GIT_TAG"; write-output $env:GIT_ADDITIONAL_FLAGS} Else { write-output "Not from a tag build"}
+  - ps: If ($env:APPVEYOR_SCHEDULED_BUILD -eq "True" ) { write-output "From a scheduled build" } Else { write-output "Not from a scheduled build"}
+  - set PYTHON_EXE=C:\%PYTHON%\python
+  - set PIP_EXE=C:\%PYTHON%\Scripts\pip
+  - call %PYTHON_EXE% --version
+  - call %PIP_EXE% --version
+  - echo [distutils] # this tells distutils what package indexes you can push to > %USERPROFILE%\.pypirc
+  - echo index-servers = >> %USERPROFILE%\.pypirc
+  - echo     pypi >> %USERPROFILE%\.pypirc
+  - echo     pypitest >> %USERPROFILE%\.pypirc
+  - echo     legacy >> %USERPROFILE%\.pypirc
+  - echo. >> %USERPROFILE%\.pypirc
+  - echo [pypi] >> %USERPROFILE%\.pypirc
+  - echo repository: https://pypi.python.org/pypi >> %USERPROFILE%\.pypirc
+  - echo username: %PYPI_USERNAME% >> %USERPROFILE%\.pypirc
+  - echo password: %PYPI_PASSWORD% >> %USERPROFILE%\.pypirc
+  - echo. >> %USERPROFILE%\.pypirc
+  - echo [pypitest] >> %USERPROFILE%\.pypirc
+  - echo repository: https://testpypi.python.org/pypi >> %USERPROFILE%\.pypirc
+  - echo username: %PYPI_USERNAME% >> %USERPROFILE%\.pypirc
+  - echo password: %PYPI_PASSWORD% >> %USERPROFILE%\.pypirc
+  - echo. >> %USERPROFILE%\.pypirc
+  - echo [legacy] >> %USERPROFILE%\.pypirc
+  - echo repository: https://upload.pypi.org/legacy/ >> %USERPROFILE%\.pypirc
+  - echo username: %PYPI_USERNAME% >> %USERPROFILE%\.pypirc
+  - echo password: %PYPI_PASSWORD% >> %USERPROFILE%\.pypirc
+  - echo. >> %USERPROFILE%\.pypirc
+  - echo [server-login] >> %USERPROFILE%\.pypirc
+  - echo username: %PYPI_USERNAME% >> %USERPROFILE%\.pypirc
+  - echo password: %PYPI_PASSWORD% >> %USERPROFILE%\.pypirc
+  - dir %USERPROFILE%
+
+# cache:
+  # - C:\ProgramData\chocolatey\bin -> appveyor.yml
+  # - C:\ProgramData\chocolatey\lib -> appveyor.yml
+  # - C:\deps\opencv-install -> windows/make_opencv.cmd
+  # - C:\deps\openblas-install -> windows/make_openblas.cmd
+
+# scripts that run after cloning repository
+install:
+  - echo "install script"
+  - choco install -y pandoc
+  - pandoc --version
+  - call %PIP_EXE% install pypandoc nose wheel twine numpy matplotlib
+  - SET NOSE_EXE=%PYTHON_DIR%\Scripts\nosetests
+  - SET TWINE_EXE=%PYTHON_DIR%\Scripts\twine
+  - dir %PYTHON_DIR%\Scripts\
+  - call %NOSE_EXE% --version
+  - call %TWINE_EXE% --version
+
+# real work
+build:
+
+# scripts to run before build
+before_build:
+  - echo "before build script"
+  - git clone --recursive https://github.com/dmlc/gluon-cv gluon-cv %GIT_ADDITIONAL_FLAGS%
+  - pushd .\gluon-cv
+  - FOR /F "delims=" %%i IN ('git rev-parse HEAD') DO echo %%i > COMMIT_HASH
+
+# scripts to run after build
+after_build:
+  - cd %APPVEYOR_BUILD_FOLDER%
+  - call %PYTHON_EXE% setup.py sdist
+  - call %PYTHON_EXE% setup.py bdist_wheel --universal
+
+# to run your custom scripts instead of automatic MSBuild
+build_script:
+
+# scripts to run before tests
+before_test:
+  - cd %APPVEYOR_BUILD_FOLDER%
+  - FOR /F "tokens=* USEBACKQ" %%F IN (`dir /b /a-d dist\mxnet*`) DO (SET wheel_name=%%F)
+
+# to run your custom scripts instead of automatic tests
+test_script:
+  - cd %APPVEYOR_BUILD_FOLDER%
+  - echo %wheel_name%
+  - 7z x "dist\%wheel_name%" -odebug_wheel
+  - dir
+  - dir debug_wheel\mxnet
+  - call %PIP_EXE% install -U --force-reinstall "dist\%wheel_name%"
+  - call %PYTHON_EXE% sanity_test.py
+  # - call %NOSE_EXE% -v mxnet-build\tests\python\unittest\test_gluon_data.py
+  # - call %NOSE_EXE% -v mxnet-build\tests\python\unittest\test_gluon_model_zoo.py
+
+artifacts:
+  - path: dist\*
+    name: pypiartifacts
+
+deploy_script:
+  # - call %TWINE_EXE% upload -r legacy --skip-existing dist/*
+  - ps: If ($env:APPVEYOR_REPO_TAG -eq "true" -Or $env:APPVEYOR_SCHEDULED_BUILD -eq "True") { Invoke-Expression "$env:TWINE_EXE upload -r legacy --skip-existing dist/*" } Else { write-output "Not on a tag or scheduled, won't deploy to pypi"}
