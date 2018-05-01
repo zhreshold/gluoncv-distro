@@ -37,6 +37,7 @@ init:
   - ps: If ($env:APPVEYOR_SCHEDULED_BUILD -eq "True" ) { write-output "From a scheduled build" } Else { write-output "Not from a scheduled build"}
   - set PYTHON_EXE=C:\%PYTHON%\python
   - set PIP_EXE=C:\%PYTHON%\Scripts\pip
+  - set PYTHON_DIR=C:\%PYTHON%
   - call %PYTHON_EXE% --version
   - call %PIP_EXE% --version
 
