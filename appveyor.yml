@@ -80,7 +80,7 @@ before_test:
   - SET GLUONCV_DIR=%APPVEYOR_BUILD_FOLDER%\gluon-cv\
   - echo %GLUONCV_DIR%
   - dir %GLUONCV_DIR%
-  - cp /Y setup.py gluon-cv\
+  - xcopy /Y setup.py gluon-cv\setup.py
   - cd .\gluon-cv
   - FOR /F "delims=" %%i IN ('git rev-parse HEAD') DO echo %%i > COMMIT_HASH
   - call %PYTHON_EXE% setup.py sdist
