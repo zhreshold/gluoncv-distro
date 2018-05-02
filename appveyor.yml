@@ -61,8 +61,7 @@ install:
   - call .\pypirc.cmd
 
 # real work
-build:
-  - echo "build phase"
+build: "off"
 
 # scripts to run before build
 before_build:
