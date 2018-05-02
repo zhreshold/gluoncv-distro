@@ -65,6 +65,15 @@ build: "off"
 
 # scripts to run before build
 before_build:
+
+# scripts to run after build
+after_build:
+
+# to run your custom scripts instead of automatic MSBuild
+build_script:
+
+# scripts to run before tests
+before_test:
   - echo "before build script"
   - cd %APPVEYOR_BUILD_FOLDER%
   - git clone --recursive https://github.com/dmlc/gluon-cv gluon-cv %GIT_ADDITIONAL_FLAGS%
@@ -74,17 +83,8 @@ before_build:
   - cp /Y setup.py gluon-cv\
   - cd .\gluon-cv
   - FOR /F "delims=" %%i IN ('git rev-parse HEAD') DO echo %%i > COMMIT_HASH
-
-# scripts to run after build
-after_build:
   - call %PYTHON_EXE% setup.py sdist
   - call %PYTHON_EXE% setup.py bdist_wheel --universal
-
-# to run your custom scripts instead of automatic MSBuild
-build_script:
-
-# scripts to run before tests
-before_test:
   - cd %GLUONCV_DIR%
   - FOR /F "tokens=* USEBACKQ" %%F IN (`dir /b /a-d dist\gluoncv*`) DO (SET wheel_name=%%F)
 
