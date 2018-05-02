@@ -30,6 +30,24 @@ long_description = (
 `GluonCV <https://gluon-cv.mxnet.io>`_ provides implementations of the state-of-the-art (SOTA) deep learning models in computer vision.
 
 It is designed for engineers, researchers, and students to fast prototype products and research ideas based on these models.
+
+Installation
+------------
+
+To install, use:
+
+.. code-block: bash
+
+    pip install gluoncv mxnet>=1.2.0
+
+To enable different hardware supports such as GPUs, check out  `mxnet variants <https://pypi.org/project/mxnet/>`_.
+
+For example, you can install cuda-9.0 supported mxnet alongside gluoncv:
+
+.. code-block: bash
+
+    pip install gluoncv mxnet-cu90>=1.2.0
+
 """)
 
 VERSION = find_version('gluoncv', '__init__.py')
@@ -50,6 +68,7 @@ requirements = [
     # 'mxnet',
     'matplotlib',
     'Pillow',
+    'scipy',
 ]
 
 setup(
