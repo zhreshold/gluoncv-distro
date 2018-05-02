@@ -67,9 +67,9 @@ build: "off"
 before_build:
   - echo "before build script"
   - cd %APPVEYOR_BUILD_FOLDER%
-  - SET GLUONCV_DIR=%APPVEYOR_BUILD_FOLDER%\gluon-cv
+  - SET GLUONCV_DIR=%APPVEYOR_BUILD_FOLDER%\gluon-cv\
   - git clone --recursive https://github.com/dmlc/gluon-cv gluon-cv %GIT_ADDITIONAL_FLAGS%
-  - cp /Y setup.py gluon-cv/
+  - cp /Y setup.py gluon-cv\
   - cd .\gluon-cv
   - FOR /F "delims=" %%i IN ('git rev-parse HEAD') DO echo %%i > COMMIT_HASH
 
