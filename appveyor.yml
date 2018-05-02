@@ -90,7 +90,7 @@ before_test:
 
 # to run your custom scripts instead of automatic tests
 test_script:
-  - cd %GLUONCV_DIR%
+  - cd %APPVEYOR_BUILD_FOLDER%
   - echo %wheel_name%
   - 7z x "gluon-cv\dist\%wheel_name%" -odebug_wheel
   - dir
