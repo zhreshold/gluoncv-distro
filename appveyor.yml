@@ -66,13 +66,14 @@ build: "off"
 # scripts to run before build
 before_build:
   - echo "before build script"
+  - cd %APPVEYOR_BUILD_FOLDER%
   - git clone --recursive https://github.com/dmlc/gluon-cv gluon-cv %GIT_ADDITIONAL_FLAGS%
+  - cp /Y setup.py gluon-cv/
   - cd .\gluon-cv
   - FOR /F "delims=" %%i IN ('git rev-parse HEAD') DO echo %%i > COMMIT_HASH
 
 # scripts to run after build
 after_build:
-  - cd %APPVEYOR_BUILD_FOLDER%\gluon-cv
   - call %PYTHON_EXE% setup.py sdist
   - call %PYTHON_EXE% setup.py bdist_wheel --universal
 
@@ -88,10 +89,10 @@ before_test:
 test_script:
   - cd %APPVEYOR_BUILD_FOLDER%\gluon-cv
   - echo %wheel_name%
-  - 7z x "dist\%wheel_name%" -odebug_wheel
+  - 7z x "gluon-cv\dist\%wheel_name%" -odebug_wheel
   - dir
   - dir debug_wheel\gluoncv
-  - call %PIP_EXE% install -U --force-reinstall "dist\%wheel_name%"
+  - call %PIP_EXE% install -U --force-reinstall "gluon-cv\dist\%wheel_name%"
   - cd %APPVEYOR_BUILD_FOLDER%
   - call %PYTHON_EXE% sanity_test.py
 
