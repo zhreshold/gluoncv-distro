@@ -105,4 +105,4 @@ artifacts:
     name: pypiartifacts
 
 deploy_script:
-  - ps: If ($env:APPVEYOR_REPO_TAG -eq "true" -Or $env:APPVEYOR_SCHEDULED_BUILD -eq "True") { Invoke-Expression "$env:TWINE_EXE upload -r pypi --skip-existing gluon-cv/dist/*" } Else { write-output "Not on a tag or scheduled, won't deploy to pypi"}
+  - ps: If ($env:APPVEYOR_REPO_TAG -eq "true" -Or $env:APPVEYOR_SCHEDULED_BUILD -eq "True") { Invoke-Expression "$env:TWINE_EXE upload -r legacy --skip-existing gluon-cv/dist/*" } Else { write-output "Not on a tag or scheduled, won't deploy to pypi"}
