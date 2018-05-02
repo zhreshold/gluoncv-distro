@@ -94,7 +94,7 @@ test_script:
   - echo %wheel_name%
   - 7z x "gluon-cv\dist\%wheel_name%" -odebug_wheel
   - dir
-  - dir debug_wheel\gluoncv
+  - dir debug_wheel\
   - call %PIP_EXE% install -U --force-reinstall "gluon-cv\dist\%wheel_name%"
   - cd %APPVEYOR_BUILD_FOLDER%
   - call %PYTHON_EXE% sanity_test.py
