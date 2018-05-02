@@ -36,7 +36,7 @@ Installation
 
 To install, use:
 
-.. code-block: bash
+.. code-block:: bash
 
     pip install gluoncv mxnet>=1.2.0
 
@@ -44,7 +44,7 @@ To enable different hardware supports such as GPUs, check out  `mxnet variants <
 
 For example, you can install cuda-9.0 supported mxnet alongside gluoncv:
 
-.. code-block: bash
+.. code-block:: bash
 
     pip install gluoncv mxnet-cu90>=1.2.0
 

@@ -6,7 +6,6 @@ echo     pypitest >> %USERPROFILE%\.pypirc
 echo     legacy >> %USERPROFILE%\.pypirc
 echo. >> %USERPROFILE%\.pypirc
 echo [pypi] >> %USERPROFILE%\.pypirc
-echo repository: https://pypi.python.org/pypi >> %USERPROFILE%\.pypirc
 echo username: %PYPI_USERNAME% >> %USERPROFILE%\.pypirc
 echo password: %PYPI_PASSWORD% >> %USERPROFILE%\.pypirc
 echo. >> %USERPROFILE%\.pypirc
