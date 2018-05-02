@@ -67,6 +67,7 @@ build: "off"
 before_build:
   - echo "before build script"
   - cd %APPVEYOR_BUILD_FOLDER%
+  - SET GLUONCV_DIR=%APPVEYOR_BUILD_FOLDER%\gluon-cv
   - git clone --recursive https://github.com/dmlc/gluon-cv gluon-cv %GIT_ADDITIONAL_FLAGS%
   - cp /Y setup.py gluon-cv/
   - cd .\gluon-cv
@@ -82,12 +83,12 @@ build_script:
 
 # scripts to run before tests
 before_test:
-  - cd %APPVEYOR_BUILD_FOLDER%\gluon-cv
+  - cd %GLUONCV_DIR%
   - FOR /F "tokens=* USEBACKQ" %%F IN (`dir /b /a-d dist\gluoncv*`) DO (SET wheel_name=%%F)
 
 # to run your custom scripts instead of automatic tests
 test_script:
-  - cd %APPVEYOR_BUILD_FOLDER%\gluon-cv
+  - cd %GLUONCV_DIR%
   - echo %wheel_name%
   - 7z x "gluon-cv\dist\%wheel_name%" -odebug_wheel
   - dir
