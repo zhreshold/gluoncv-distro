@@ -23,9 +23,9 @@ image: Visual Studio 2015
 environment:
   PYTHON: Python35
   PYPI_PASSWORD:
-    secure: I2X8n7lRmasNOSfkam/LctMp5yw2X3UYmsA46RD6ikI=
+    secure: 3Q7RJFelNX5ptiCrQrnOKg==
   PYPI_USERNAME:
-    secure: aOj5+o65rCsGgeSwL7nHjg==
+    secure: FQrgB9W+kITzpTxXsc1wNw==
 
 matrix:
   fast_finish: true
