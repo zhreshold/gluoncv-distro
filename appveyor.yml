@@ -21,7 +21,7 @@ image: Visual Studio 2015
 
 # environment variables
 environment:
-  PYTHON: Python35
+  PYTHON: Python35-x64
   PYPI_PASSWORD:
     secure: 3Q7RJFelNX5ptiCrQrnOKg==
   PYPI_USERNAME:
