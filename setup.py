@@ -38,7 +38,7 @@ To install, use:
 
 .. code-block:: bash
 
-    pip install gluoncv mxnet>=1.3.0 --upgrade
+    pip install gluoncv mxnet-mkl>=1.4.0 --upgrade
 
 To enable different hardware supports such as GPUs, check out  `mxnet variants <https://pypi.org/project/mxnet/>`_.
 
@@ -46,7 +46,7 @@ For example, you can install cuda-9.0 supported mxnet alongside gluoncv:
 
 .. code-block:: bash
 
-    pip install gluoncv mxnet-cu90>=1.3.0 --upgrade
+    pip install gluoncv mxnet-cu90mkl>=1.4.0 --upgrade
 
 """)
 
@@ -83,7 +83,6 @@ setup(
 
     # Package info
     packages=find_packages(exclude=('docs', 'tests', 'scripts')),
-
     zip_safe=True,
     include_package_data=True,
     install_requires=requirements,
