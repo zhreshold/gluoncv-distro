@@ -52,7 +52,7 @@ install:
   - echo "install script"
   - choco install -y pandoc
   - pandoc --version
-  - call %PIP_EXE% install pypandoc nose wheel twine numpy matplotlib scipy
+  - call %PIP_EXE% install pypandoc nose wheel twine numpy matplotlib scipy portalocker
   - call %PIP_EXE% install mxnet --pre --upgrade
   - SET NOSE_EXE=%PYTHON_DIR%\Scripts\nosetests
   - SET TWINE_EXE=%PYTHON_DIR%\Scripts\twine
