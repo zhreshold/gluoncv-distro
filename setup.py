@@ -70,6 +70,14 @@ requirements = [
     'portalocker',
     'Pillow',
     'scipy',
+    'tensorboardx',
+    'decord',
+    'opencv-python',
+    'yacs',
+    'pandas',
+    'pyyaml',
+    'autocfg',
+    'autogluon.core'
 ]
 
 setup(
