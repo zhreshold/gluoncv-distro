@@ -6,6 +6,10 @@ import re
 import shutil
 import sys
 from setuptools import setup, find_packages
+try:
+    import cv2
+except ImportError:
+    cv2 = None
 
 
 def read(*names, **kwargs):
@@ -38,15 +42,17 @@ To install, use:
 
 .. code-block:: bash
 
-    pip install gluoncv mxnet-mkl>=1.4.0 --upgrade
+    pip install gluoncv mxnet>=1.6.0 --upgrade
+    # for installing gluoncv with all dependencies
+    pip install gluoncv[full] mxnet>=1.6.0 --upgrade
 
 To enable different hardware supports such as GPUs, check out  `mxnet variants <https://pypi.org/project/mxnet/>`_.
 
-For example, you can install cuda-9.0 supported mxnet alongside gluoncv:
+For example, you can install cuda-11.0 supported mxnet alongside gluoncv:
 
 .. code-block:: bash
 
-    pip install gluoncv mxnet-cu90mkl>=1.4.0 --upgrade
+    pip install gluoncv mxnet-cu110>=1.6.0 --upgrade
 
 """)
 
@@ -70,15 +76,24 @@ requirements = [
     'portalocker',
     'Pillow',
     'scipy',
-    'tensorboardx',
-    'decord',
-    'opencv-python',
+    #'tensorboardx',
+    #'decord',
+    #'opencv-python',
     'yacs',
     'pandas',
     'pyyaml',
     'autocfg',
-    'autogluon.core'
+    #'autogluon.core'
 ]
+
+# do not duplicate opencv module if already compiled from source
+if cv2 is None:
+    requirements.append('opencv-python')
+
+extra_requirements = {
+    'full': ['tensorboardx', 'decord', 'autogluon.core', 'cython', 'pycocotools'],
+    'auto': ['autogluon.core']
+}
 
 setup(
     # Metadata
@@ -86,7 +101,7 @@ setup(
     version=VERSION,
     author='Gluon CV Toolkit Contributors',
     url='https://github.com/dmlc/gluon-cv',
-    description='MXNet Gluon CV Toolkit',
+    description='Gluon CV Toolkit',
     long_description=long_description,
     license='Apache-2.0',
 
@@ -95,4 +110,5 @@ setup(
     zip_safe=True,
     include_package_data=True,
     install_requires=requirements,
+    extras_require=extra_requirements
 )
