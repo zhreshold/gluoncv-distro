@@ -33,7 +33,7 @@ matrix:
 # scripts that are called at very beginning, before repo cloning
 init:
   - git config --global core.autocrlf input
-  - ps: If ($env:APPVEYOR_REPO_TAG -eq "true" ) { write-output "From a tag build"; $GIT_TAG = (echo $env:APPVEYOR_REPO_TAG_NAME | %{$_ -replace "^patch-[^-]*-", ""});  If ($GIT_TAG.Split("-").GetUpperBound(0) -eq 2 ) { $GIT_TAG = ($GIT_TAG.Split("-")[$GIT_TAG.Split("-").GetUpperBound(0)]); write-output "patching for" $GIT_TAG; } else {write-output "Not patching special commit";}; $env:GIT_ADDITIONAL_FLAGS = "-b $GIT_TAG"; write-output $env:GIT_ADDITIONAL_FLAGS} Else { write-output "Not from a tag build"}
+  - ps: If ($env:APPVEYOR_REPO_TAG -eq "true" ) { write-output "From a tag build"; $GIT_TAG = (echo $env:APPVEYOR_REPO_TAG_NAME | %{$_ -replace "^patch-[^-]*-", ""});  If ($GIT_TAG.Split("-").GetUpperBound(0) -eq 3 ) { $env:GIT_COMMIT_ID = $GIT_TAG.Split("-")[3] ;$GIT_TAG = $GIT_TAG.Split("-")[2]; write-output "patching for" $GIT_TAG; } else {write-output "Not patching special commit";}; $env:GIT_ADDITIONAL_FLAGS = "-b $GIT_TAG"; write-output $env:GIT_ADDITIONAL_FLAGS} Else { write-output "Not from a tag build"}
   - ps: If ($env:APPVEYOR_SCHEDULED_BUILD -eq "True" ) { write-output "From a scheduled build" } Else { write-output "Not from a scheduled build"}
   - set PYTHON_EXE=C:\%PYTHON%\python
   - set PIP_EXE=C:\%PYTHON%\Scripts\pip
@@ -78,6 +78,7 @@ before_test:
   - echo "before build script"
   - cd %APPVEYOR_BUILD_FOLDER%
   - git clone --recursive https://github.com/dmlc/gluon-cv gluon-cv %GIT_ADDITIONAL_FLAGS%
+  - cd gluon-cv && git checkout %GIT_COMMIT_ID% && cd ..
   - SET GLUONCV_DIR=%APPVEYOR_BUILD_FOLDER%\gluon-cv\
   - echo %GLUONCV_DIR%
   - dir %GLUONCV_DIR%
