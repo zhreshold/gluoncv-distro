@@ -60,9 +60,6 @@ VERSION = find_version('gluoncv', '__init__.py')
 
 if 'TRAVIS_TAG' in os.environ and os.environ['TRAVIS_TAG'].startswith('patch-'):
     VERSION = os.environ['TRAVIS_TAG'].split('-')[1]
-elif 'APPVEYOR_REPO_TAG_NAME' in os.environ and os.environ['APPVEYOR_REPO_TAG_NAME'].startswith('patch-') and ':' in os.environ['APPVEYOR_REPO_TAG_NAME']:
-    # create a minor release, the format is patch-0.xx.xx.xx:abcdefgh where abcdefgh is the commit id of on the dmlc/gluon-cv master branch
-    VERSION = os.environ['APPVEYOR_REPO_TAG_NAME'].split('-')[1].split(':')[0]
 elif 'APPVEYOR_REPO_TAG_NAME' in os.environ and os.environ['APPVEYOR_REPO_TAG_NAME'].startswith('patch-'):
     VERSION = os.environ['APPVEYOR_REPO_TAG_NAME'].split('-')[1]
 elif 'TRAVIS_TAG' in os.environ or 'APPVEYOR_REPO_TAG_NAME' in os.environ:
