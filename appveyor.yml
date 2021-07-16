@@ -33,7 +33,7 @@ matrix:
 # scripts that are called at very beginning, before repo cloning
 init:
   - git config --global core.autocrlf input
-  - ps: If ($env:APPVEYOR_REPO_TAG -eq "true" ) { write-output "From a tag build"; $GIT_TAG = (echo $env:APPVEYOR_REPO_TAG_NAME | %{$_ -replace "^patch-[^-]*-", ""}); write-output "tag:" $GIT_TAG; If ($GIT_TAG.Split("-").GetUpperBound(0) -eq 2 ) { $env:GIT_COMMIT_ID = $GIT_TAG.Split("-")[2] ;$GIT_TAG = $GIT_TAG.Split("-")[1]; write-output "patching for" $GIT_TAG $env:GIT_COMMIT_ID; } else {write-output "Not patching special commit";}; $env:GIT_ADDITIONAL_FLAGS = "-b $GIT_TAG"; write-output $env:GIT_ADDITIONAL_FLAGS} Else { write-output "Not from a tag build"}
+  - ps: If ($env:APPVEYOR_REPO_TAG -eq "true" ) { write-output "From a tag build"; $GIT_TAG = (echo $env:APPVEYOR_REPO_TAG_NAME | %{$_ -replace "^patch-[^-]*-", ""}); write-output "tag:" $GIT_TAG; If ($GIT_TAG.Split("-").GetUpperBound(0) -eq 1 ) { $env:GIT_COMMIT_ID = $GIT_TAG.Split("-")[1] ;$GIT_TAG = $GIT_TAG.Split("-")[0]; write-output "patching for" $GIT_TAG $env:GIT_COMMIT_ID; } else {write-output "Not patching special commit";}; $env:GIT_ADDITIONAL_FLAGS = "-b $GIT_TAG"; write-output $env:GIT_ADDITIONAL_FLAGS} Else { write-output "Not from a tag build"}
   - ps: If ($env:APPVEYOR_SCHEDULED_BUILD -eq "True" ) { write-output "From a scheduled build" } Else { write-output "Not from a scheduled build"}
   - set PYTHON_EXE=C:\%PYTHON%\python
   - set PIP_EXE=C:\%PYTHON%\Scripts\pip
