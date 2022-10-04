@@ -22,10 +22,9 @@ image: Visual Studio 2015
 # environment variables
 environment:
   PYTHON: Python36-x64
-  PYPI_PASSWORD:
-    secure: 3Q7RJFelNX5ptiCrQrnOKg==
+  PYPI_PASSWORD: __token__
   PYPI_USERNAME:
-    secure: FQrgB9W+kITzpTxXsc1wNw==
+    secure: 4CAPBjb06r0r8jhhbsxjqAXWS5vQxjn40zBd+vnA7L76bb4v/5VyWK2ajOPC29uT1Pit4bg13hyg1qBdFB6gP6uACIga5WRvXH4fCZGUZ56/KJoJHxgsQPxOXdTnNvKQVQXiR7COlT4ji4VyaqFeWQebQkRv8qUIz6VSk/qFZTfHvBMANKuDG2rkplQ3qDhj92R/02O6XviLeu/U6Dy2xcG590CvGbIv4o+Vcg8CMgokE8L/cSq7MaPGjaPWGMBynFxFC7mouxwp5ppDmyX7Gw==
 
 matrix:
   fast_finish: true
